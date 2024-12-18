@@ -11,12 +11,8 @@ class AuthFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_it_can_create_a_user()
+   
+    public function test_create_a_user()
     {
         $data = [
             'name'     => 'John Doe',
