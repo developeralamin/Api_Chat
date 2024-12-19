@@ -3,23 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Repository\MessageRepository;
+use App\Http\Requests\MessageRequest;
 
 class MessageController extends Controller
 {
-    public function store(Request $request)
+
+    private MessageRepository $message;
+
+    public function __construct(MessageRepository $message)
+    {
+        $this->message = $message;
+    }
+
+    public function store(MessageRequest $request)
      {
-        $message = new Message();
-        $message->sender_id = auth()->user()->id;
-        $message->recipient_id = $request->recipient_id;
-        $message->content = $request->content;
-        $message->status = 'sent';
-        $message->save();
+        $data = $request->only(['recipient_id','content']);
 
-        $updatedMessage = Message::with(['sender', 'receiver'])->find($message->id);
+        $message =  $this->message->store($data);
+        $messageInfo = Message::with(['sender', 'receiver'])->find($message->id);
 
-        return response()->json(data: ['status' => true, 'message' => $updatedMessage], status: 201);
+        return $this->success($messageInfo,201);
     }
 
 }
