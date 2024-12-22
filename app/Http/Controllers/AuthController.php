@@ -9,6 +9,7 @@ use App\Http\Requests\RegistrationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\ProfileResource;
 use App\Repository\AuthRepository;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -59,4 +60,17 @@ class AuthController extends Controller
 
         return $this->success('Thanks for Registration.', 201);
     }
+
+
+        /**
+     * @return Response
+     */
+    public function authUser(): Response
+    {
+        $user = Auth::user();
+
+        return $this->success($user);
+    }
+
+
 }
